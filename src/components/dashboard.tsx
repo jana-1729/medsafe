@@ -199,7 +199,8 @@ export function Dashboard({
           <StatusBanner status={status} summary={summary} medCount={meds.length} />
 
           <Tabs defaultValue="overview" className="mt-6 w-full">
-            <TabsList className="h-9">
+            <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+              <TabsList className="h-9 w-max">
               <TabsTrigger value="overview">
                 <LayoutDashboard className="size-4" />
                 Overview
@@ -235,7 +236,8 @@ export function Dashboard({
                   </span>
                 ) : null}
               </TabsTrigger>
-            </TabsList>
+              </TabsList>
+            </div>
 
             <TabsContent value="overview" className="mt-5">
               <OverviewTab
