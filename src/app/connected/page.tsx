@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TriangleAlert, Link2 } from "lucide-react";
 import { getConnections, fetchAllRecords } from "@/lib/medblocks";
+import { getPatientId } from "@/lib/patient";
 import { normalizeMedications } from "@/lib/normalize";
 import {
   normalizeConditions,
@@ -27,13 +28,14 @@ export default async function ConnectedPage({
   const { demo } = await searchParams;
   const initialDemo = demo === "1" || demo === "true";
 
+  const patientId = await getPatientId();
   let connections: any[] = [];
   let resources: any[] = [];
   let error: string | null = null;
 
   try {
-    connections = await getConnections();
-    resources = await fetchAllRecords();
+    connections = await getConnections(patientId);
+    resources = await fetchAllRecords(patientId);
   } catch (e: unknown) {
     error = e instanceof Error ? e.message : String(e);
   }
