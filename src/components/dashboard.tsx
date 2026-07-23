@@ -18,6 +18,7 @@ import {
   FlaskConical,
   HeartPulse,
   Sparkles,
+  ClipboardList,
 } from "lucide-react";
 import type {
   Medication,
@@ -50,10 +51,12 @@ import {
   summaryToText,
 } from "@/components/print-summary";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WatchtowerBell } from "@/components/watchtower-bell";
 import { OverviewTab } from "@/components/tabs/overview-tab";
 import { MedicationsTab } from "@/components/tabs/medications-tab";
 import { LabsTab } from "@/components/tabs/labs-tab";
 import { CareTab } from "@/components/tabs/care-tab";
+import { CareTransitionTab } from "@/components/tabs/care-transition-tab";
 import { AskTab } from "@/components/tabs/ask-tab";
 import { cn } from "@/lib/utils";
 
@@ -145,6 +148,7 @@ export function Dashboard({
               <SourceBadges sources={sources} />
             </div>
             <div className="flex items-center gap-2">
+              <WatchtowerBell />
               <ThemeToggle />
               <Dialog>
                 <DialogTrigger render={<Button variant="outline" size="sm" />}>
@@ -200,7 +204,7 @@ export function Dashboard({
 
           <Tabs defaultValue="overview" className="mt-6 w-full">
             <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
-              <TabsList className="h-9 w-max">
+              <TabsList className="!h-12 w-max gap-1 !rounded-2xl !p-1.5 [&_[role=tab]]:!rounded-xl [&_[role=tab]]:!px-4 [&_[role=tab]]:gap-2 [&_[role=tab]]:text-[0.9rem]">
               <TabsTrigger value="overview">
                 <LayoutDashboard className="size-4" />
                 Overview
@@ -235,6 +239,10 @@ export function Dashboard({
                     {careOverdue}
                   </span>
                 ) : null}
+              </TabsTrigger>
+              <TabsTrigger value="recovery">
+                <ClipboardList className="size-4" />
+                Recovery
               </TabsTrigger>
               </TabsList>
             </div>
@@ -282,6 +290,14 @@ export function Dashboard({
 
             <TabsContent value="prevention" className="mt-5">
               <CareTab gaps={careGaps} />
+            </TabsContent>
+
+            <TabsContent value="recovery" className="mt-5">
+              <CareTransitionTab
+                timeline={timeline}
+                meds={meds}
+                problems={problems}
+              />
             </TabsContent>
           </Tabs>
 
