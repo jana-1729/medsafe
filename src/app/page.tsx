@@ -10,6 +10,12 @@ import {
   TrendingDown,
   Syringe,
   HeartPulse,
+  Pill,
+  Activity,
+  ClipboardList,
+  RadioTower,
+  Stethoscope,
+  HeartHandshake,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,6 +41,56 @@ const STEPS = [
     icon: TriangleAlert,
     title: "Catch the danger",
     body: "We flag risky combinations, duplicates, and gaps in plain language — so you can bring them to your doctor.",
+  },
+];
+
+const FEATURES: {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+  who: "Patient" | "Clinician";
+}[] = [
+  {
+    icon: Pill,
+    title: "One honest medication list",
+    body: "Every med from every source, merged and de-duplicated — with interaction and duplicate checks.",
+    who: "Patient",
+  },
+  {
+    icon: Sparkles,
+    title: "Ask your records (AI)",
+    body: "Chat with your health history — answers grounded only in your data, with sources cited.",
+    who: "Patient",
+  },
+  {
+    icon: Activity,
+    title: "Lab & vital trends",
+    body: "Your results charted over time, with out-of-range flags.",
+    who: "Patient",
+  },
+  {
+    icon: HeartPulse,
+    title: "Preventive care",
+    body: "Overdue screenings and vaccines, checked against common guidelines.",
+    who: "Patient",
+  },
+  {
+    icon: ClipboardList,
+    title: "Recovery companion",
+    body: "After a hospital visit: what to take, what changed, and when to get help.",
+    who: "Patient",
+  },
+  {
+    icon: RadioTower,
+    title: "Watchtower alerts",
+    body: "Real-time monitoring — flagged the moment any source adds a risky prescription.",
+    who: "Patient",
+  },
+  {
+    icon: Stethoscope,
+    title: "Point-of-care safety",
+    body: "Cross-source interaction checks delivered to the prescriber via CDS Hooks, at order time.",
+    who: "Clinician",
   },
 ];
 
@@ -78,21 +134,38 @@ export default async function Home({
           </Alert>
         ) : null}
 
-        <div className="mt-8 flex flex-col items-center gap-3">
-          <Button
-            render={<Link href="/api/connect" />}
-            nativeButton={false}
-            size="lg"
-            className="h-12 px-8 text-base"
+        <div className="mt-8 w-full max-w-md">
+          <form
+            action="/api/connect"
+            method="POST"
+            className="flex flex-col gap-2 sm:flex-row"
           >
-            Connect your records
-          </Button>
-          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Lock className="size-3" />
-            Read-only. We never store your login. You can disconnect anytime.
-          </span>
+            <input
+              name="id"
+              required
+              autoComplete="off"
+              placeholder="Choose your MedSafe ID (name or email)"
+              className="h-12 flex-1 rounded-xl border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+            />
+            <Button type="submit" size="lg" className="h-12 px-6 text-base">
+              Connect
+            </Button>
+          </form>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Lock className="size-3" />
+              Read-only, revocable — we never see your password
+            </span>
+            <span aria-hidden>·</span>
+            <Link
+              href="/api/use-demo"
+              className="font-medium text-foreground underline underline-offset-2"
+            >
+              Explore the demo →
+            </Link>
+          </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
             <span>Catches</span>
             <Badge variant="outline" className="font-normal">warfarin + aspirin</Badge>
             <Badge variant="outline" className="font-normal">duplicate prescriptions</Badge>
@@ -251,6 +324,78 @@ export default async function Home({
         </div>
       </section>
 
+      <section className="mx-auto max-w-5xl px-5 pb-16 sm:px-6">
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            Everything in one place
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-pretty text-sm text-muted-foreground">
+            One connection powers a full companion for patients — and a safety
+            net for the clinicians who treat them.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((f) => (
+            <div key={f.title} className="rounded-xl border bg-background p-5">
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex size-9 items-center justify-center rounded-lg bg-muted">
+                  <f.icon className="size-[18px] text-foreground" />
+                </span>
+                <Badge
+                  variant={f.who === "Clinician" ? "secondary" : "outline"}
+                  className="font-normal"
+                >
+                  {f.who === "Clinician" ? "For clinicians" : "For patients"}
+                </Badge>
+              </div>
+              <h3 className="mt-3 font-medium">{f.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{f.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-4xl px-5 pb-16 sm:px-6">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-2xl border bg-background p-6">
+            <h3 className="flex items-center gap-2 font-semibold">
+              <HeartHandshake className="size-5 text-emerald-600" />
+              For patients
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Connect once and understand your whole record — medications, labs,
+              conditions, and history — plus plain-language answers and real-time
+              safety alerts. It&apos;s decision support, never a replacement for
+              your doctor.
+            </p>
+            <Link
+              href="/api/use-demo"
+              className="mt-3 inline-block text-sm font-medium underline underline-offset-2"
+            >
+              Explore the patient app →
+            </Link>
+          </div>
+          <div className="rounded-2xl border bg-background p-6">
+            <h3 className="flex items-center gap-2 font-semibold">
+              <Stethoscope className="size-5 text-sky-600" />
+              For clinicians
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              See the medications your EHR can&apos;t — assembled across every
+              connected source — surfaced as a CDS Hooks card at the moment you
+              prescribe, so cross-source interactions are caught before the order
+              is signed.
+            </p>
+            <Link
+              href="/clinician?demo=1"
+              className="mt-3 inline-block text-sm font-medium underline underline-offset-2"
+            >
+              Open the clinician view →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-4xl px-5 pb-20 sm:px-6 sm:pb-24">
         <div className="grid gap-4 sm:grid-cols-3">
           {STEPS.map((s, i) => (
@@ -274,6 +419,14 @@ export default async function Home({
           MedSafe is a decision-support demo, not medical advice. Interaction
           checks cover common high-risk combinations only. Always confirm with
           your doctor or pharmacist before changing any medication.
+        </p>
+        <p className="mt-4 text-center text-xs">
+          <Link
+            href="/clinician?demo=1"
+            className="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+          >
+            For clinicians — see the point-of-care CDS Hooks view →
+          </Link>
         </p>
       </section>
     </main>
