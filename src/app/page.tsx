@@ -145,7 +145,7 @@ export default async function Home({
               required
               autoComplete="off"
               placeholder="Choose your MedSafe ID (name or email)"
-              className="h-12 flex-1 rounded-xl border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              className="h-12 w-full rounded-xl border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 sm:flex-1"
             />
             <Button type="submit" size="lg" className="h-12 px-6 text-base">
               Connect
